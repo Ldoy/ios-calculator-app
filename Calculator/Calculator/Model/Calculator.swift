@@ -196,8 +196,9 @@ struct Calculator: Calculatorable, CalculatorablePostfix {
 		
 		if let intValue = castedValue {
 			return String(intValue)
-		} else {
-            let double = round(number * 100) / 100
+		}
+			else {
+            let double = number
 			return String(double)
 		}
 	}

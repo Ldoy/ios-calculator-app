@@ -363,8 +363,13 @@
                         </constraints>
                     </view>
                     <connections>
+                        <outlet property="anchor" destination="dlN-3y-jhh" id="BOx-Lp-Km4"/>
                         <outlet property="currentNumberLabel" destination="Lwz-OF-XHD" id="iGm-Sx-ohq"/>
+                        <outlet property="operatorTest" destination="HPC-iy-qdm" id="NFu-G5-Noa"/>
                         <outlet property="prevNumberLabel" destination="Hcb-r0-27f" id="u0W-vW-ImO"/>
+                        <outlet property="scrollViewTest" destination="BOT-7g-vxv" id="758-Q4-KNp"/>
+                        <outlet property="stackViewTest" destination="6I9-iL-eIa" id="gAv-Ku-Igt"/>
+                        <outlet property="testTest" destination="XRe-QE-UJf" id="fOO-24-oKH"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>

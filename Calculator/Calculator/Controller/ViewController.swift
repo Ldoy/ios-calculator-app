@@ -11,28 +11,55 @@ class ViewController: UIViewController {
     @IBOutlet weak var currentNumberLabel: UILabel!
     @IBOutlet weak var prevNumberLabel: UILabel!
     var count = 0
-
-    var currentNumberString = ""{
-        didSet {
-            let value = inputStorage[count]
-            
-            if let valueType = try? CalculatorComponent.convertToComponentType(from: value), valueType == .operator {
-                prevNumberLabel.text? = currentNumberLabel.text ?? "0"
-                currentNumberLabel.text = "0"
-            }
-            
-            self.currentNumberLabel.text? += value
-            count += 1
-        }
-    }
-    
+	var testString = ""
+	
+	var isOperator = false {
+		didSet {
+			let value = inputStorage[count]
+			count += 1
+			if self.isOperator {
+				prevNumberLabel.text? = currentNumberLabel.text ?? zero
+				currentNumberLabel.text = zero
+				return
+			}
+			
+			if self.currentNumberLabel.text == zero {
+				self.currentNumberLabel.text? = value
+			} else {
+				self.currentNumberLabel.text? += value
+			}
+		}
+	}
+	
+	var isConvertSign = false {
+		didSet {
+			count += 1
+			guard let currentText = self.currentNumberLabel.text else {
+				return
+			}
+			
+			if self.isConvertSign {
+				self.currentNumberLabel.text = "-" + currentText
+			} else if let index = currentText.firstIndex(of: "-") {
+				self.currentNumberLabel.text?.remove(at: index)
+			} else {
+				self.isConvertSign = !self.isConvertSign
+				count -= 1
+			}
+		}
+	}
+	
 	private let calculator: Calculatorable = Calculator()
 	private let zero = "0"
-	private var inputStorage: [String] = ["+"]
+	private var inputStorage: [String] = []
 		
 	override func viewDidLoad() {
 		super.viewDidLoad()
-        currentNumberString = "여기엔 아무거나 들어가도 되요 근데 뭐라도 들어가야 해요"
+	}
+	
+	override func viewWillAppear(_ animated: Bool) {
+		currentNumberLabel.text = zero
+		count = 0
 	}
 	
 	private func updateChangableOperator(with: String) {
@@ -46,7 +73,7 @@ class ViewController: UIViewController {
 			if lastType == .operator && with != lastElement {
 				let lastIndex = inputStorage.count-1
 				inputStorage[lastIndex] = with
-			} else if lastType == .number {
+			} else {
 				inputStorage.append(with)
 			}
 		}
@@ -54,31 +81,59 @@ class ViewController: UIViewController {
 	
     @IBAction func touchUpNumberButton(_ sender: UIButton) {
         inputStorage.append("\(sender.tag)")
-        currentNumberString = "숫자가 클릭됨"
-    }
-    
+		isOperator = false
+		testString += "\(sender.tag)"
+	}
+	
+	@IBOutlet weak var stackViewTest: UIStackView!
+	@IBOutlet weak var testTest: UIStackView!
+	
+	@IBOutlet weak var operatorTest: UILabel!
+	
+	@IBOutlet weak var scrollViewTest: UIScrollView!
+	
     @IBAction func touchUpDoubleZeroButton(_ sender: UIButton) {
         inputStorage.append("00")
+		isOperator = false
     }
     
     @IBAction func touchUpDotButton(_ sender: UIButton) {
         inputStorage.append(".")
+		isOperator = false
 	}
+	@IBOutlet weak var anchor: NSLayoutConstraint!
 	
 	@IBAction func touchUpDivideButton(_ sender: UIButton) {
 		updateChangableOperator(with: "/")
+		isOperator = true
+		
+		
+		let label = UILabel()
+		let label2 = UILabel()
+		label.text = currentNumberLabel.text ?? "0"
+		label2.text = "/"
+		testTest.addArrangedSubview(label2)
+
+		testTest.addArrangedSubview(label)
+		
+
+		testString = ""
+		scrollViewTest.setContentOffset(CGPoint.init(x: 0, y: scrollViewTest.contentSize.height + scrollViewTest.contentInset.bottom - scrollViewTest.bounds.height), animated: false)
 	}
 	
 	@IBAction func touchUpMultiplyButton(_ sender: UIButton) {
 		updateChangableOperator(with: "*")
+		isOperator = true
 	}
 	
 	@IBAction func touchUpMinusButton(_ sender: UIButton) {
 		updateChangableOperator(with: "-")
+		isOperator = true
 	}
 	
 	@IBAction func touchUpPlusButton(_ sender: UIButton) {
 		updateChangableOperator(with: "+")
+		isOperator = true
 	}
 	
 	@IBAction func touchUpEqualButton(_ sender: UIButton) {
@@ -87,6 +142,8 @@ class ViewController: UIViewController {
 	
 	@IBAction func touchUpAllClearButton(_ sender: UIButton) {
 		inputStorage.removeAll()
+		currentNumberLabel.text = zero
+		count = 0
 	}
 	
 	@IBAction func touchUpClearEntryButton(_ sender: UIButton) {
@@ -105,6 +162,7 @@ class ViewController: UIViewController {
 	
 	@IBAction func touchUpConvertSignButton(_ sender: UIButton) {
 		inputStorage.append("⁺⁄₋")
+		isConvertSign = !isConvertSign
 	}
 	
 }
