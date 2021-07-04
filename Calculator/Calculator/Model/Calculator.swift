@@ -19,6 +19,14 @@ enum CalculatorComponent {
 	case clearEntry
 	case signConverter
 	case dot
+    
+    static func checkValueIsDouble(value: String) -> Bool {
+        if Double(value) != nil {
+            return true
+        } else {
+            return false
+        }
+    }
 	
 	static func convertToComponentType(from userInput: String) throws -> Self {
 		switch userInput {
@@ -35,7 +43,11 @@ enum CalculatorComponent {
 		case "⁺⁄₋" :
 			return .signConverter
 		default:
-			throw ErrorCase.unknownInputCase
+            if checkValueIsDouble(value: userInput) {
+                return .number
+            } else {
+                throw ErrorCase.unknownInputCase
+            }
 		}
 	}
 }
@@ -44,12 +56,12 @@ protocol Calculatorable {
 	func calculate(input: [String]) -> String
 }
 
-protocol CalculatorablePostfix {
-	func convertToPostfixExpression(fromInfix input: [String]) -> [String]
-	func calculatePostfixExpression(postfix: [String]) throws -> Double
+protocol PostfixExpression {
+	func convertToPostfix(fromInfix input: [String]) -> [String]
+	func calculatePostfix(postfix: [String]) throws -> Double
 }
 
-extension CalculatorablePostfix {
+extension PostfixExpression {
 	private func checkPriority(A a: String, isLowerThenB b: String) -> Bool {
 		if ["+", "-"].contains(a), ["*", "/"].contains(b) {
 			return true
@@ -81,7 +93,7 @@ extension CalculatorablePostfix {
 					infixNumberString.remove(at: infixNumberString.startIndex)
 				}
 			default:
-                if let _ = Double(userInput) {
+                if CalculatorComponent.checkValueIsDouble(value: userInput) {
                     infixNumberString += userInput
                 } else {
                     throw ErrorCase.unknownInputCase
@@ -94,12 +106,12 @@ extension CalculatorablePostfix {
 		return infixExpression
 	}
 	
-	func convertToPostfixExpression(fromInfix input: [String]) -> [String] {
+	func convertToPostfix(fromInfix input: [String]) -> [String] {
 		var postfix = [String]()
-		var stack = Stack()
+		var stack = Stack<String>()
 		
 		for currentElement in input {
-			if let isNumber = Double(currentElement) {
+			if let _ = Double(currentElement) {
 				postfix.append(currentElement)
 			} else {
 				if let lastElement = stack.pop() {
@@ -126,8 +138,8 @@ extension CalculatorablePostfix {
 		return postfix
 	}
 	
-	func calculatePostfixExpression(postfix: [String]) throws -> Double {
-		var stack = Stack()
+	func calculatePostfix(postfix: [String]) throws -> Double {
+		var stack = Stack<String>()
 		var popedValueFromStack: Double {
 			return Double(stack.pop() ?? zero) ?? .zero
 		}
@@ -165,7 +177,8 @@ extension CalculatorablePostfix {
 	}
 }
 
-struct Calculator: Calculatorable, CalculatorablePostfix {
+struct Calculator: Calculatorable, PostfixExpression {
+    
 	private let numberFormatter = NumberFormatter()
 	private let maximumSignificantDigits = 20
 	private let currentLocale = "en_US"
@@ -211,9 +224,9 @@ struct Calculator: Calculatorable, CalculatorablePostfix {
 			return notANumber
 		}
 		
-		let postfix = convertToPostfixExpression(fromInfix: infix)
+		let postfix = convertToPostfix(fromInfix: infix)
 		
-		guard let calculatedValue = try? calculatePostfixExpression(postfix: postfix) else {
+		guard let calculatedValue = try? calculatePostfix(postfix: postfix) else {
 			return notANumber
 		}
 		
