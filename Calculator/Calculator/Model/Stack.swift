@@ -1,9 +1,17 @@
 import Foundation
 
-struct Stack {
-    private var storedValue: [String] = []
+struct Stack<T> {
+    private var storedValue: [T] = []
     
-    mutating func pop() -> String? {
+    func peek() -> T? {
+        guard let peekedValue = self.storedValue.last else {
+            return nil
+        }
+        
+        return peekedValue
+    }
+    
+    mutating func pop() -> T? {
         guard let popedValue = self.storedValue.popLast() else {
             return nil
         }
@@ -11,15 +19,7 @@ struct Stack {
         return popedValue
     }
     
-    mutating func push(element: String){
+    mutating func push(element: T){
         self.storedValue.append(element)
-    }
-    
-    func peek() -> String? {
-        guard let peekedValue = self.storedValue.last else {
-            return nil
-        }
-        
-        return peekedValue
     }
 }
