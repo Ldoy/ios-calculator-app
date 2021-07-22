@@ -11,6 +11,72 @@
 |---|---|
 |![image](./flowchart/reader.png)|![image](./flowchart/calculator.png)|
 
+
+###프로젝트 진행을 위해 필요한 개념
+- Protocol
+- UML
+- Unit Test, TDD
+- 자료구조(특히 Stack)와 알고리즘
+- Extension
+- NSNumber, NSLocale, Locale
+- Delegate Pattern
+- NumberFormmater
+- Error Handling
+- mutating
+- Postfix, Infix Expression
+- 부동소수점 오류
+- OOP, POP
+- tag
+- IBAction, IBOutlet
+- XCTest
+- 브레이크 포인트
+- StackView, ScrollView
+- Code Coverage
+- Performance Tests
+- SOLID
+    - Single Responsibility Principle (SRP) 단일책임원칙
+    - Open-Closed Principle (OCP) 개방폐쇄 원칙
+    - Liskov Substitution Principle (LSP) 리스코브 치환 원칙
+    - Interface Segregation Principle (ISP) 인터페이스 분리 원칙
+    - Dependency Inversion Principle (DIP) 의존성 역성 원칙
+
+
+##프로젝트 진행 중 생겼던 문제 상황
+1. 후위표현식으로 바꾸는 for 루프의 에러를 어떻게 해결할 것인가
+   -  모든 for loop 마다 프린트 해서 에러 해결함 
+   -  고찰 : print보단 LLDB를 사용해서 다음번엔 해결 해 보자!
+
+2. 스택구조 구현할 때 removeLast로 했더니 에러 → popLast로 변경, removeLast 는 마지막 값을 반환해 주기 때문에 빈 배열인 경우 에러가 생김 
+3. 반올림 어떻게 하지?
+
+    ```swift
+    let numberFormatter = NumberFormatter()
+    numberFormatter.roundingMode = .floor //  형식을 버림으로 지정
+    ```
+
+    → roundingMode에는 ceiling, floor, down, up, halfEven, halfDown, halfUP 이 있다. 
+
+    [https://developer.apple.com/documentation/foundation/numberformatter/roundingmode](https://developer.apple.com/documentation/foundation/numberformatter/roundingmode)
+
+    [https://twih1203.medium.com/swift5-numberformatter로-소수점-아래-자릿수-반올림-없이-자르기-ee33219e3cdd](https://twih1203.medium.com/swift5-numberformatter%EB%A1%9C-%EC%86%8C%EC%88%98%EC%A0%90-%EC%95%84%EB%9E%98-%EC%9E%90%EB%A6%BF%EC%88%98-%EB%B0%98%EC%98%AC%EB%A6%BC-%EC%97%86%EC%9D%B4-%EC%9E%90%EB%A5%B4%EA%B8%B0-ee33219e3cdd)
+    
+4. extension은 저장 프로퍼티 선언이 안됨
+
+![https://s3-us-west-2.amazonaws.com/secure.notion-static.com/62cc0498-6965-4b45-8f96-568502d26ae3/Screen_Shot_2021-06-29_at_15.48.52.png](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/62cc0498-6965-4b45-8f96-568502d26ae3/Screen_Shot_2021-06-29_at_15.48.52.png)
+
+- 대체 가능 코드
+
+    ```swift
+    extension Calculatorable {
+    	struct Holder {
+    		static let numberFormatter = Numberformatter()
+    		static let zero = "0"
+    		static let maximumsignificantDigits = 20
+    		static currentLocale = "en_US"
+    		}
+    }
+    ```
+
 ## 프로젝트 진행 중 의문점과 문제점들에 대한 고찰
 
 1. 프로젝트 코드에서 아래와 같이 구현했었는데 그렇다면 prev가 Double이고 next가 Int인 경우와 그 반대의 경우를 모두 구현해야 한다는 문제점이 생긴다. 그렇다면 모든 사용자 입력값을 Double로 바꾸는게 어떨까하는 생각이 들었다. 아니면 Generic을 사용하면 이 문제가 해결될까?
