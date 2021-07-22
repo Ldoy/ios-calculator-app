@@ -4,13 +4,18 @@
 
 - 이 저장소를 자신의 저장소로 fork하여 프로젝트를 진행합니다
 ---
+## 프로젝트 진행 중 의문점과 문제점들에 대한 고찰
+날짜: July 3, 2021
+작성자: Tacocat😺 
+태그: 계산기, 프로젝트회고
+
+# 계산기 프로젝트 회고
 
 ### Flowchart
 
 |Reader|Calculator|
 |---|---|
 |![image](./flowchart/reader.png)|![image](./flowchart/calculator.png)|
-
 
 ## 프로젝트 진행 중 생겼던 문제 상황
 1. 후위표현식으로 바꾸는 for 루프의 에러를 어떻게 해결할 것인가
@@ -47,13 +52,7 @@
 
     [https://twih1203.medium.com/swift5-numberformatter로-소수점-아래-자릿수-반올림-없이-자르기-ee33219e3cdd](https://twih1203.medium.com/swift5-numberformatter%EB%A1%9C-%EC%86%8C%EC%88%98%EC%A0%90-%EC%95%84%EB%9E%98-%EC%9E%90%EB%A6%BF%EC%88%98-%EB%B0%98%EC%98%AC%EB%A6%BC-%EC%97%86%EC%9D%B4-%EC%9E%90%EB%A5%B4%EA%B8%B0-ee33219e3cdd)
     
-
-## 프로젝트 진행 중 의문점과 문제점들에 대한 고찰
-날짜: July 3, 2021
-작성자: Tacocat😺 
-태그: 계산기, 프로젝트회고
-
-# 계산기 프로젝트 회고
+## 프로젝트 중 생긴 의문점과 나름의 
 
 ### 왜 스택을 사용하라고 했을까? 리스트와의 차이점과 장단점은 무엇일까? (ing)
 
@@ -365,7 +364,7 @@
     - Dependency Inversion Principle (DIP) 의존성 역성 원칙
 
 
-
+### Numeric과 Sequence, Bio(O)Notation
 1. Numeric
     - `protocol Numeric`
     - A type with values that support multiplication. = 값의 증대를 surpport
@@ -535,14 +534,9 @@ func calculate(input: [String]) -> String {
 ```
 
 
-
-
-
 ### 이번 프로젝트를 통해 내가 부족 or 필요하다고 느낀 것
 
 1. `autolayout` - 왠지 이걸 썼어야 step3의 기능을 만족할 수 있었을 것 같다. 
 2. `Naming`이 아직 어렵다 → 네이밍을 잘 할 수 있는 방법???
-
-
 
 
