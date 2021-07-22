@@ -52,7 +52,7 @@
 
     [https://twih1203.medium.com/swift5-numberformatter로-소수점-아래-자릿수-반올림-없이-자르기-ee33219e3cdd](https://twih1203.medium.com/swift5-numberformatter%EB%A1%9C-%EC%86%8C%EC%88%98%EC%A0%90-%EC%95%84%EB%9E%98-%EC%9E%90%EB%A6%BF%EC%88%98-%EB%B0%98%EC%98%AC%EB%A6%BC-%EC%97%86%EC%9D%B4-%EC%9E%90%EB%A5%B4%EA%B8%B0-ee33219e3cdd)
     
-## 프로젝트 중 생긴 의문점과 나름의 
+## 프로젝트 중 생긴 의문점과 나름의 답
 
 ### 왜 스택을 사용하라고 했을까? 리스트와의 차이점과 장단점은 무엇일까? (ing)
 
