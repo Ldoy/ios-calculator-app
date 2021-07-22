@@ -12,7 +12,74 @@
 |![image](./flowchart/reader.png)|![image](./flowchart/calculator.png)|
 
 
-###프로젝트 진행을 위해 필요한 개념
+## 프로젝트 진행 중 생겼던 문제 상황
+1. 후위표현식으로 바꾸는 for 루프의 에러를 어떻게 해결할 것인가
+   -  모든 for loop 마다 프린트 해서 에러 해결함 
+   -  고찰 : print보단 LLDB를 사용해서 다음번엔 해결 해 보자!
+
+2. 스택구조 구현할 때 removeLast로 구현해서 생긴 에러 
+   - popLast로 변경, removeLast 는 마지막 값을 반환해 주기 때문에 빈 배열인 경우 에러가 생김 
+   
+3. extension은 저장 프로퍼티 선언이 안됨
+- 대체 가능 코드
+
+    ```swift
+    extension Calculatorable {
+    	struct Holder {
+    		static let numberFormatter = Numberformatter()
+    		static let zero = "0"
+    		static let maximumsignificantDigits = 20
+    		static currentLocale = "en_US"
+    		}
+    }
+    ```
+    
+4. 반올림을 하는 방법 
+
+    ```swift
+    let numberFormatter = NumberFormatter()
+    numberFormatter.roundingMode = .floor //  형식을 버림으로 지정
+    ```
+
+    → roundingMode에는 ceiling, floor, down, up, halfEven, halfDown, halfUP 이 있다. 
+
+    [https://developer.apple.com/documentation/foundation/numberformatter/roundingmode](https://developer.apple.com/documentation/foundation/numberformatter/roundingmode)
+
+    [https://twih1203.medium.com/swift5-numberformatter로-소수점-아래-자릿수-반올림-없이-자르기-ee33219e3cdd](https://twih1203.medium.com/swift5-numberformatter%EB%A1%9C-%EC%86%8C%EC%88%98%EC%A0%90-%EC%95%84%EB%9E%98-%EC%9E%90%EB%A6%BF%EC%88%98-%EB%B0%98%EC%98%AC%EB%A6%BC-%EC%97%86%EC%9D%B4-%EC%9E%90%EB%A5%B4%EA%B8%B0-ee33219e3cdd)
+    
+
+## 프로젝트 진행 중 의문점과 문제점들에 대한 고찰
+날짜: July 3, 2021
+작성자: Tacocat😺 
+태그: 계산기, 프로젝트회고
+
+# 계산기 프로젝트 회고
+
+## 왜 스택을 사용하라고 했을까? 리스트와의 차이점과 장단점은 무엇일까? (ing)
+
+- 스택 : 추상 자료형 ADT, 기능 자체가 정의 되어있는게 아님. 기능은 우리가 정의해야 하기 때문에 . 자료정리방식을 제한하기 위해 (왜냐면 배열은 정리방식이 너무 다양하기 때문에)
+    - 스택을 구현할 때 `Array`로 구현하냐 `List`로 구현하냐의 차이
+        - 리스트로 구현 시 `node`를 설정하게 되는데
+    - 스택과 리스트 중 어떤것이 더 프로젝트 기능 구현에 적합한 것인지?
+        - 스택 : 조금 더 쉬워서 중점적으로 사용하라고 했을까?
+        - 리스트.....
+- 리스트 :
+
+## 왜 나는 Double로 바꾸자고 제안했을까?
+
+- 이유 : Float가 부동소수점 오류를 유발하며 7자리까지 나타낼 수 밖에 없기 때문
+- 하지만 Double로 바꾸어도 부동소수점 오류는 발생함. ⇒ ~~어떤 타입으로 바꿀지 고민하다가 스위프트에서 수의 타입에 대한 피피티를 보았는데 지금 생각해보니 Numeric으로 변경하면 되지 않을까 싶다~~.
+    - Numeric은 프로토콜. 따라서 해당 프로토콜을 채택하도록 해야하나?
+	⇒ 확인해 보았지만... 뭐가 다른건지 알 수 없다. 잼킹과 코든의 프로젝트 코드를 보았는데 여러 부분에서 Double로 바꾸는 것을 알 수 있었다... 흠... 우리조는 왜 부동소수점 오류가 있었던거지...
+
+## 리팩토링이 힘든이유
+- 코드의 리팩토링을 시도하고자 했지만 메소드가 잘 쪼개져 있지않아서 우선 오류파악이 힘들다.
+- ***이유 : 객체지향 설계를 하지 않았기 때문인 것 같다.***
+- 다음 부터는 SOLID 원칙을 생각하면서 메소드는 10줄 안에, 타입은 200줄 안에 쓰도록 시도해야겠다.
+
+
+
+### 프로젝트 진행을 위해 필요한 개념
 - Protocol
 - UML
 - Unit Test, TDD
@@ -41,79 +108,8 @@
     - Dependency Inversion Principle (DIP) 의존성 역성 원칙
 
 
-## 프로젝트 진행 중 생겼던 문제 상황
-1. 후위표현식으로 바꾸는 for 루프의 에러를 어떻게 해결할 것인가
-   -  모든 for loop 마다 프린트 해서 에러 해결함 
-   -  고찰 : print보단 LLDB를 사용해서 다음번엔 해결 해 보자!
 
-2. 스택구조 구현할 때 removeLast로 했더니 에러 → popLast로 변경, removeLast 는 마지막 값을 반환해 주기 때문에 빈 배열인 경우 에러가 생김 
-3. 반올림 어떻게 하지?
-
-    ```swift
-    let numberFormatter = NumberFormatter()
-    numberFormatter.roundingMode = .floor //  형식을 버림으로 지정
-    ```
-
-    → roundingMode에는 ceiling, floor, down, up, halfEven, halfDown, halfUP 이 있다. 
-
-    [https://developer.apple.com/documentation/foundation/numberformatter/roundingmode](https://developer.apple.com/documentation/foundation/numberformatter/roundingmode)
-
-    [https://twih1203.medium.com/swift5-numberformatter로-소수점-아래-자릿수-반올림-없이-자르기-ee33219e3cdd](https://twih1203.medium.com/swift5-numberformatter%EB%A1%9C-%EC%86%8C%EC%88%98%EC%A0%90-%EC%95%84%EB%9E%98-%EC%9E%90%EB%A6%BF%EC%88%98-%EB%B0%98%EC%98%AC%EB%A6%BC-%EC%97%86%EC%9D%B4-%EC%9E%90%EB%A5%B4%EA%B8%B0-ee33219e3cdd)
-    
-4. extension은 저장 프로퍼티 선언이 안됨
-- 대체 가능 코드
-
-    ```swift
-    extension Calculatorable {
-    	struct Holder {
-    		static let numberFormatter = Numberformatter()
-    		static let zero = "0"
-    		static let maximumsignificantDigits = 20
-    		static currentLocale = "en_US"
-    		}
-    }
-    ```
-    
-    
-
-## 프로젝트 진행 중 의문점과 문제점들에 대한 고찰
-
-# TIL_🌮🐈‍⬛_계산기 프로젝트 회고
-
-날짜: July 3, 2021
-작성자: Tacocat😺 
-태그: 계산기, 프로젝트회고
-
-# 계산기 프로젝트 회고
-
-## 왜 스택을 사용하라고 했을까? 리스트와의 차이점과 장단점은 무엇일까? (ing)
-
-- 스택 : 추상 자료형 ADT, 기능 자체가 정의 되어있는게 아님. 기능은 우리가 정의해야 하기 때문에 . 자료정리방식을 제한하기 위해 (왜냐면 배열은 정리방식이 너무 다양하기 때문에)
-    - 스택을 구현할 때 `Array`로 구현하냐 `List`로 구현하냐의 차이
-        - 리스트로 구현 시 `node`를 설정하게 되는데
-    - 스택과 리스트 중 어떤것이 더 프로젝트 기능 구현에 적합한 것인지?
-        - 스택 : 조금 더 쉬워서 중점적으로 사용하라고 했을까?
-        - 리스트.....
-- 리스트 :
-
-## 왜 나는 Double로 바꾸자고 제안했을까?
-
-- 이유 : Float가 부동소수점 오류를 유발하며 7자리까지 나타낼 수 밖에 없기 때문
-- 하지만 Double로 바꾸어도 부동소수점 오류는 발생함. ⇒ ~~어떤 타입으로 바꿀지 고민하다가 스위프트에서 수의 타입에 대한 피피티를 보았는데 지금 생각해보니 Numeric으로 변경하면 되지 않을까 싶다~~.
-    - Numeric은 프로토콜. 따라서 해당 프로토콜을 채택하도록 해야하나?
-
-        ⇒ 확인해 보았지만... 뭐가 다른건지 알 수 없다. 잼킹과 코든의 프로젝트 코드를 보았는데 여러 부분에서 Double로 바꾸는 것을 알 수 있었다... 흠... 우리조는 왜 부동소수점 오류가 있었던거지...
-
-- 코드의 리팩토링을 시도하고자 했지만 메소드가 잘 쪼개져 있지않아서 우선 오류파악이 힘들다.
-- ***이유 : 객체지향 설계를 하지 않았기 때문인 것 같다.***
-
-    ~~→ 방학 때 해결 해 볼 수 있을까??~~
-
-- 다음 부터는 SOLID 원칙을 생각하면서 메소드는 10줄 안에, 타입은 200줄 안에 쓰도록 시도해야겠다.
-- Numeric
-
-    ## Numeric
-
+1. Numeric
     - `protocol Numeric`
     - A type with values that support multiplication. = 값의 증대를 surpport
     - 아래와 같이 사용할 수 있다.
@@ -126,10 +122,7 @@
     }
     ```
 
-- `Numeric`을 읽다 나온 `Sequence`
-
-    ## Sequence, Overview
-
+2. `Numeric`을 읽다 나온 `Sequence`
     - element에 연속적이고 반복적인 접근을 제공하는 타입 (A type that provides sequential, iterated access to its elements.)
     - 어떠한 sequence의 요소 혹은 값에 연속적인 접근이 가능한 경우 프로토콜 Sequnce 는 여러 기능을 제공한다.
         - `sequence` : Collection 과 Range 타입 등이 이에 해당한다고 한다.
@@ -168,99 +161,93 @@
             }
             ```
 
-    ### Repeated Access
+	1. Repeated Access
+	    - for in loop는 반복되는 대상이 Collection 이 아닌 경우 임의의 순서대로 진행된다.
+	    - nondestructive iteration 를 위해선 반복되는 대상이  Collection protocol 에 따르도록 해야한다.
+	    - consumable 이 OOP에서 가지는 [의미](https://stackoverflow.com/questions/7296674/what-is-meant-by-the-term-consumable-with-regards-to-object-orientation), ~~갑자기 궁금해서 찾아봄~~
+		- 파라미터로 사용 가능한 경우
+		    - 예 : 오브젝트 A가 오브젝트 B의 파라미터로 쓰일 수 있는 경우 = Object A is consumable by Object B
 
-    - for in loop는 반복되는 대상이 Collection 이 아닌 경우 임의의 순서대로 진행된다.
-    - nondestructive iteration 를 위해선 반복되는 대상이  Collection protocol 에 따르도록 해야한다.
-    - consumable 이 OOP에서 가지는 [의미](https://stackoverflow.com/questions/7296674/what-is-meant-by-the-term-consumable-with-regards-to-object-orientation), ~~갑자기 궁금해서 찾아봄~~
-        - 파라미터로 사용 가능한 경우
-            - 예 : 오브젝트 A가 오브젝트 B의 파라미터로 쓰일 수 있는 경우 = Object A is consumable by Object B
+	2. Conforming to the Sequence Protocol
+	    - 만약 custom 타입에 각 요소에 연속적이고 반복적인 접근이 필요하다면 해당 타입에 `Sequence` 프로토콜을 채택해서 `makeIteratator`()를 사용해라
 
-    ### Conforming to the Sequence Protocol
+		```swift
+		var testArray = ["A", "B"].makeIterator()
+		while let test = testArray.next() {
+			print(test)
+		}
 
-    - 만약 custom 타입에 각 요소에 연속적이고 반복적인 접근이 필요하다면 해당 타입에 `Sequence` 프로토콜을 채택해서 `makeIteratator`()를 사용해라
+		// makeInteratro 는 array의 interator의 instance를 반환한다
+		// next 메소드의 경우 testArray의 다음값을 의미한다. 
+		//while 루프에서 next 요소가 있을 때까지 루프를 돌린다는 의미
+		```
+		
+	    - 만약 custom 타입에 내부에 iterate 기능을 하는 메소드가 있다면 `IteratorProtocol` 를 채택해라
 
-        ```swift
-        var testArray = ["A", "B"].makeIterator()
-        while let test = testArray.next() {
-        	print(test)
-        }
+	5. Expected Performance
+	    - sequence  는 O(1) 을 제공하기 때문에 문서에 따로 기록되어 있지 않는 이상 sequence를 traverse하는 루틴은 O(n) 이다.
+	    - Big(O) [Notation](https://www.youtube.com/watch?v=BEVnxbxBqi8&list=PL7jH19IHhOLMdHvl3KBfFI70r9P0lkJwL&index=4) : 함수 내부에서 함수를 실행하기 위해 구현된 step과 input 관계를 표기하는 방법
+	    1. Constant Time, O(1)
+		- 인풋에 상관없이 항상 스텝 수가 일정
 
-        // makeInteratro 는 array의 interator의 instance를 반환한다
-        // next 메소드의 경우 testArray의 다음값을 의미한다. 
-        //while 루프에서 next 요소가 있을 때까지 루프를 돌린다는 의미
-        ```
+		```swift
+		func consTantFunc(_ input: Int...) {
+			print(input)
+		}
+		// input에 어떤 값이 들어오더라도 (예 : 1,2,3,4,5....) 함수 내부에서
+		// 이 input을 처리하는 step은 print(input) 한 스텝 뿐!
+		```
 
-    - 만약 custom 타입에 내부에 iterate 기능을 하는 메소드가 있다면 `IteratorProtocol` 를 채택해라
+	    2. O(N)
 
-    ### Expected Performance
+	    - 인풋이 증가하면 N배 만큼 스텝수가 증가
+		- 2N, 3N 이던 항상 N 으로 표기 (이유 : 여기서 전달하고자 하는 바는 인풋이 증가하면 스텝이 증가한다는 메세지 이므로!)
 
-    - sequence  는 O(1) 을 제공하기 때문에 문서에 따로 기록되어 있지 않는 이상 sequence를 traverse하는 루틴은 O(n) 이다.
-- Big(O) [Notation](https://www.youtube.com/watch?v=BEVnxbxBqi8&list=PL7jH19IHhOLMdHvl3KBfFI70r9P0lkJwL&index=4) : 함수 내부에서 함수를 실행하기 위해 구현된 step과 input 관계를 표기하는 방법
-    1. Constant Time, O(1)
-        - 인풋에 상관없이 항상 스텝 수가 일정
+		EX)  원칙적으론 2N 이라고 표현해야 하지만 1번 함수와 2번 함수의 Big O Notation은 동일하다.
 
-        ```swift
-        func consTantFunc(_ input: Int...) {
-        	print(input)
-        }
-        // input에 어떤 값이 들어오더라도 (예 : 1,2,3,4,5....) 함수 내부에서
-        // 이 input을 처리하는 step은 print(input) 한 스텝 뿐!
-        ```
+		```swift
+		// 1번
 
-    2. O(N)
+		func oOfN(_ input: [String]) {
+			for i in input {
+				print(i)
+			}
+		} 
+		---------------------------------
+		//2번
 
-    - 인풋이 증가하면 N배 만큼 스텝수가 증가
-        - 2N, 3N 이던 항상 N 으로 표기 (이유 : 여기서 전달하고자 하는 바는 인풋이 증가하면 스텝이 증가한다는 메세지 이므로!)
+		func oOfN(_ input: [String]) {
+			for i in input {
+				print(i)
+			}
 
-        EX)  원칙적으론 2N 이라고 표현해야 하지만 1번 함수와 2번 함수의 Big O Notation은 동일하다.
+			for i in input {
+				print(i)
+			}
+		} 
+		```
 
-        ```swift
-        // 1번
+	     3. Quadratic Time,  O(n^2) 
 
-        func oOfN(_ input: [String]) {
-        	for i in input {
-        		print(i)
-        	}
-        } 
-        ---------------------------------
-        //2번
+	    - Nested Loop가 있는 경우 발생
+	    - 인풋이 10개라면 필요한 단계는 10의 제곱인 100개가 됨!
 
-        func oOfN(_ input: [String]) {
-        	for i in input {
-        		print(i)
-        	}
+		```swift
+		func oOfNSquare(_ input: [String]) {
+			for i in input {
+				print(i)
+					for i in input {
+						print(i)
+				}
+			}
+		} 
+		```
 
-        	for i in input {
-        		print(i)
-        	}
-        } 
-        ```
+	    4. Logarithmic Time
 
-     3. Quadratic Time,  O(n^2) 
-
-    - Nested Loop가 있는 경우 발생
-    - 인풋이 10개라면 필요한 단계는 10의 제곱인 100개가 됨!
-
-        ```swift
-        func oOfNSquare(_ input: [String]) {
-        	for i in input {
-        		print(i)
-        			for i in input {
-        				print(i)
-        		}
-        	}
-        } 
-        ```
-
-    4. Logarithmic Time
-
-    - Binary Search 할 때 많이 쓰임
-    - 인풋값이 증가해도 일정한 시간이 걸림
-
-    ![TIL_%F0%9F%8C%AE%F0%9F%90%88%E2%80%8D%E2%AC%9B_%E1%84%80%E1%85%A8%E1%84%89%E1%85%A1%E1%86%AB%E1%84%80%E1%85%B5%20%E1%84%91%E1%85%B3%E1%84%85%E1%85%A9%E1%84%8C%E1%85%A6%E1%86%A8%E1%84%90%E1%85%B3%20%E1%84%92%E1%85%AC%E1%84%80%E1%85%A9%207620b42555c9478ab3631dc587520f2a/Untitled.png](TIL_%F0%9F%8C%AE%F0%9F%90%88%E2%80%8D%E2%AC%9B_%E1%84%80%E1%85%A8%E1%84%89%E1%85%A1%E1%86%AB%E1%84%80%E1%85%B5%20%E1%84%91%E1%85%B3%E1%84%85%E1%85%A9%E1%84%8C%E1%85%A6%E1%86%A8%E1%84%90%E1%85%B3%20%E1%84%92%E1%85%AC%E1%84%80%E1%85%A9%207620b42555c9478ab3631dc587520f2a/Untitled.png)
-
-    [https://media.springernature.com/original/springer-static/image/chp%3A10.1007%2F978-1-4842-3988-9_1/MediaObjects/465726_1_En_1_Fig1_HTML.jpg](https://media.springernature.com/original/springer-static/image/chp%3A10.1007%2F978-1-4842-3988-9_1/MediaObjects/465726_1_En_1_Fig1_HTML.jpg)
+	    - Binary Search 할 때 많이 쓰임
+	    - 인풋값이 증가해도 일정한 시간이 걸림
+	    [https://media.springernature.com/original/springer-static/image/chp%3A10.1007%2F978-1-4842-3988-9_1/MediaObjects/465726_1_En_1_Fig1_HTML.jpg](https://media.springernature.com/original/springer-static/image/chp%3A10.1007%2F978-1-4842-3988-9_1/MediaObjects/465726_1_En_1_Fig1_HTML.jpg)
 
 ## 프로젝트 코드에서 작성한 것 중 생각하지 않고 넘어간 것을 알아보자 (ing)
 
@@ -362,81 +349,81 @@
         - extension이나 해당 delegate 프로토콜을 채택하는 class or struct를 하나 만들어서 delegate 프로토콜 메소드 바디 정의
         - 해당 method가 대답을 하면(return value) 그 대답에 따라 행동이 결정
 
-```swift
-// 웨더 리뷰 전 
-protocol ProjectDelegate {
-	func isEqaulSignAlreadyInInputStorage() -> Bool
-}
-
----------------------------------------------------
-
-struct CalculatorDelegate: ProjectDelegate {
-	func isEqaulSignAlreadyInInputStorage() -> Bool {
-		if inputStrage.contains("=") [
-				return true
-		}
-		return false
+	```swift
+	// 웨더 리뷰 전 
+	protocol ProjectDelegate {
+		func isEqaulSignAlreadyInInputStorage() -> Bool
 	}
-}
-// 여기서 inputStorage는 사용자가 버튼으로 입력한 값을 저장한 String array
 
----------------------------------------------------
+	---------------------------------------------------
 
-class ViewContorller: UIViewController {
-	var delegate = CalculatorDelegate()
-	
-	@IBAction func touchUpEqualButton(_ sender: UIBotton) {
-		if !delegate.isEqualSignAlreadyInInputStorage {
-				// inputStrage에 저장한 사용자 입력 식을 계산하는 기능 수행
+	struct CalculatorDelegate: ProjectDelegate {
+		func isEqaulSignAlreadyInInputStorage() -> Bool {
+			if inputStrage.contains("=") [
+					return true
+			}
+			return false
 		}
 	}
-}
-```
+	// 여기서 inputStorage는 사용자가 버튼으로 입력한 값을 저장한 String array
 
-```swift
-// 웨더 리뷰 후 
-protocol ProjectDelegate: AnyObject {
-	func isEqaulSignAlreadyInInputStorage() -> Bool
-}
+	---------------------------------------------------
 
----------------------------------------------------
+	class ViewContorller: UIViewController {
+		var delegate = CalculatorDelegate()
 
-class Calculator {
-	weak var delegate: ProjectDelegate?
-	
-	func add() {
-		delegate.isEqaulSignAlreadyInInputStorage() 
-	// isEqaulSignAlreadyInInputStorage()의 리턴값을 add() 가 가지게됨
-	}
-
-}
-// 여기서 inputStorage는 사용자가 버튼으로 입력한 값을 저장한 String array
-
----------------------------------------------------
-
-class ViewContorller: UIViewController, ProjectDelegate {
-	let calculator = Calculator() // 1. 계산기 인스턴스 -> add 호출 시 delegate가
-	
-	override func viewDidLoad() {
-		super.viewDidLoad()	
-		calculator.delegate = self // 한번만 호출하면되기때문에 viewDidLoad에서 선언
-	}
-
-	func isEqaulSignAlreadyInInputStorage() {
-		if inputStrage.contains("=") [
-				return true
+		@IBAction func touchUpEqualButton(_ sender: UIBotton) {
+			if !delegate.isEqualSignAlreadyInInputStorage {
+					// inputStrage에 저장한 사용자 입력 식을 계산하는 기능 수행
+			}
 		}
-		return false
 	}
-	
-	@IBAction func touchUpEqualButton(_ sender: UIBotton) {
-		// 버튼 누르면 calculator 객체 만들기
-		calculator.add()
-	}
-}
-```
+	```
 
- 
+	```swift
+	// 웨더 리뷰 후 
+	protocol ProjectDelegate: AnyObject {
+		func isEqaulSignAlreadyInInputStorage() -> Bool
+	}
+
+	---------------------------------------------------
+
+	class Calculator {
+		weak var delegate: ProjectDelegate?
+
+		func add() {
+			delegate.isEqaulSignAlreadyInInputStorage() 
+		// isEqaulSignAlreadyInInputStorage()의 리턴값을 add() 가 가지게됨
+		}
+
+	}
+	// 여기서 inputStorage는 사용자가 버튼으로 입력한 값을 저장한 String array
+
+	---------------------------------------------------
+
+	class ViewContorller: UIViewController, ProjectDelegate {
+		let calculator = Calculator() // 1. 계산기 인스턴스 -> add 호출 시 delegate가
+
+		override func viewDidLoad() {
+			super.viewDidLoad()	
+			calculator.delegate = self // 한번만 호출하면되기때문에 viewDidLoad에서 선언
+		}
+
+		func isEqaulSignAlreadyInInputStorage() {
+			if inputStrage.contains("=") [
+					return true
+			}
+			return false
+		}
+
+		@IBAction func touchUpEqualButton(_ sender: UIBotton) {
+			// 버튼 누르면 calculator 객체 만들기
+			calculator.add()
+		}
+	}
+	```
+
+
 
 ## 웨더의 리뷰
 
