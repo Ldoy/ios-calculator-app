@@ -39,19 +39,7 @@
     }
     ```
     
-4. 반올림을 하는 방법 
 
-    ```swift
-    let numberFormatter = NumberFormatter()
-    numberFormatter.roundingMode = .floor //  형식을 버림으로 지정
-    ```
-
-    → roundingMode에는 ceiling, floor, down, up, halfEven, halfDown, halfUP 이 있다. 
-
-    [https://developer.apple.com/documentation/foundation/numberformatter/roundingmode](https://developer.apple.com/documentation/foundation/numberformatter/roundingmode)
-
-    [https://twih1203.medium.com/swift5-numberformatter로-소수점-아래-자릿수-반올림-없이-자르기-ee33219e3cdd](https://twih1203.medium.com/swift5-numberformatter%EB%A1%9C-%EC%86%8C%EC%88%98%EC%A0%90-%EC%95%84%EB%9E%98-%EC%9E%90%EB%A6%BF%EC%88%98-%EB%B0%98%EC%98%AC%EB%A6%BC-%EC%97%86%EC%9D%B4-%EC%9E%90%EB%A5%B4%EA%B8%B0-ee33219e3cdd)
-    
 ## 프로젝트 중 생긴 의문점과 나름의 답
 
 ### 왜 스택을 사용하라고 했을까? 리스트와의 차이점과 장단점은 무엇일까? (ing)
@@ -65,10 +53,10 @@
 - 리스트 :
 
 ### 왜 나는 Double로 바꾸자고 제안했을까?
-'처음생각'
-1. 기본 연산을 위해 '1번' 같이 구현했었는데 그렇다면 prev가 Double이고 next가 Int인 경우와 그 반대의 경우를 모두 구현해야 한다는 문제점이 생긴다. 
- - 그렇다면 모든 사용자 입력값을 Double로 바꾸는게 어떨까하는 생각이 들었다.(2번)
- - 아니면 Generic을 사용하고 스위프트 라이브러리가 제공하는 기본연산자를 사용하면 이 문제가 해결될까? (3번)
+`처음생각`
+1. 기본 연산을 위해 `1번` 같이 구현했었는데 그렇다면 prev가 Double이고 next가 Int인 경우와 그 반대의 경우를 모두 구현해야 한다는 문제점이 생긴다. 
+ - 그렇다면 모든 사용자 입력값을 Double로 바꾸는게 어떨까하는 생각이 들었다.(`2번`)
+ - 아니면 Generic을 사용하고 스위프트 라이브러리가 제공하는 기본연산자를 사용하면 이 문제가 해결될까? (`3번`)
 
 => 찾아보았는데 어떤 타입 조합도 계산 가능하도록 하는 건 [어려운](https://speakerdeck.com/jessesquires/exploring-swifts-numeric-types-and-protocols?slide=25) 것 같다! 따라서 사용자의 모든 입력값을 Double로 바꿔서 해결하는 것이 좋을 것 같다.
     - 이유 : Float가 부동소수점 오류를 유발하며 7자리까지 나타낼 수 밖에 없기 때문
@@ -129,12 +117,12 @@
     ```
 
 
-'결과'
+`결과`
 => 모든 입력값을 Double로 타입캐스팅하고 계산했는데 부동소수점 오류가 생겼다 
     - 이유 : Float, Double 모두 부동소수점 오류는 생긴다
     - 부동소수점 오류 : 실수라는 무한한 크기의 수를 크기가 한정된 변수에 담을 수 없기 때문에 어느정도의 정보손실이 일어나는 것 
 
-'해결을 위한 노력'
+`해결을 위한 노력`
 → NSNumber를 사용해서 `Double`로 바꿔보자(by 수박)
 이유 : readOnly property 를 제공하며 Boolea, Int(int16, int32등), Float, Double등의 값을 바꿀 수 있기 때문
 
@@ -150,10 +138,10 @@
  -> 결과 : 실패
 
 
-'고찰'
-=> Numeric을 더 잘 활용했어야 하는 생각이 든다. 
+`고찰`
+=> `Numeric`을 더 잘 활용했어야 하는 생각이 든다.   
 
-
+ 
 ### 리팩토링이 힘든이유
 - 코드의 리팩토링을 시도하고자 했지만 메소드가 잘 쪼개져 있지않아서 우선 오류파악이 힘들다.
 - ***이유 : 객체지향 설계를 하지 않았기 때문인 것 같다.***
@@ -335,7 +323,7 @@
 - 고차함수(map, filter, reduce 등)을 이용할 수 있을 것이다
 - forEach로 구현하면 성능 차이는 없지만 컴파일 최적화 관점에서 보았을 땐 좋다고 한다. 
 
-### 프로젝트 진행을 위해 필요한 개념
+## 프로젝트 진행을 위해 필요한 개념
 - Protocol
 - UML
 - Unit Test, TDD
@@ -363,6 +351,7 @@
     - Interface Segregation Principle (ISP) 인터페이스 분리 원칙
     - Dependency Inversion Principle (DIP) 의존성 역성 원칙
 
+---
 
 ### Numeric과 Sequence, Bio(O)Notation
 1. Numeric
