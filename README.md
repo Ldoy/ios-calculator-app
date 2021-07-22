@@ -67,8 +67,6 @@
     let test = convertToDouble(from: 4)
     ```
 
-![TIL_Tacocat_0623%20899e3498160145ec80d0ea139b6be9ce/Screen_Shot_2021-06-24_at_12.41.35.png](TIL_Tacocat_0623%20899e3498160145ec80d0ea139b6be9ce/Screen_Shot_2021-06-24_at_12.41.35.png)
-
 - **[BinaryInterger](https://developer.apple.com/documentation/swift/binaryinteger)** : The BinaryInteger protocol is the basis for all the integer types provided by the standard library
 
 → 수박의 방식 : NSNumber를 사용해서 `Double`로 바꿔보자
@@ -81,8 +79,14 @@
     - 언제 사용?
         - NumberFormatter의 `string(from:)` 메소드의 경우 from 의 인자로 NSNumber타입만 가능하기 때문에 이 메소드를 쓸 때 타입캐스팅으로(as) NSNumber로 바꾼 후 string(from:)메소드 [사용](https://www.hackingwithswift.com/example-code/language/what-is-nsnumber)
 
-2. Protocol만들고 Extension을 따로 추가하면서 구현하는 이유가 무엇일까?
+=> 하지만 이렇게 Double 바꾸고 계산하니 부동소수점 오류가 생겼다 
+    - 이유 : Float, Double 모두 부동소수점 오류는 생긴다
+    - 부동소수점 오류 : 실수라는 무한한 크기의 수를 크기가 한정된 변수에 담을 수 없기 때문에 어느정도의 정보손실이 일어나는 것 
+        
 
+2. Protocol만들고 Extension을 따로 추가하면서 구현하는 이유가 무엇일까?
 - 프로토콜을 내부에 함수구현이 안되기 때문에 특정 데이터 타입(Collection, Int등) 프로토콜에 세부 method를 구현해 주고 싶을 때 extension을 사용한다.
 
 3. 프로젝트 코드에서 for loop로 구현한 것 말고 어떻게 다르게 구현할 수 있을까?
+- 고차함수(map, filter, reduce 등)을 이용할 수 있을 것이다
+- forEach로 구현하면 성능 차이는 없지만 컴파일 최적화 관점에서 보았을 땐 좋다고 한다. 
