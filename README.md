@@ -318,6 +318,8 @@
 
 ### Protocol만들고 Extension을 따로 추가하면서 구현하는 이유가 무엇일까?
 - 프로토콜을 내부에 함수구현이 안되기 때문에 특정 데이터 타입(Collection, Int등) 프로토콜에 세부 method를 구현해 주고 싶을 때 extension을 사용한다.
+- 코드의 가독성을 증가시킨다
+- value type일 경우 extension안에 구현하면 컴파일 타임에 기존의 method dispatch 방법이 static dispatch로 바뀌기 때문에 성능에 기여한다. 
 
 ### 프로젝트 코드에서 for loop로 구현한 것 말고 어떻게 다르게 구현할 수 있을까?
 - 고차함수(map, filter, reduce 등)을 이용할 수 있을 것이다
@@ -493,6 +495,10 @@
 	    - Binary Search 할 때 많이 쓰임
 	    - 인풋값이 증가해도 일정한 시간이 걸림
 	    [https://media.springernature.com/original/springer-static/image/chp%3A10.1007%2F978-1-4842-3988-9_1/MediaObjects/465726_1_En_1_Fig1_HTML.jpg](https://media.springernature.com/original/springer-static/image/chp%3A10.1007%2F978-1-4842-3988-9_1/MediaObjects/465726_1_En_1_Fig1_HTML.jpg)
+	    
+### UIButton의 `tag`	
+- tag를 어떻게 사용할 수 있었을까? : 받아온 tag값을 매게변수로 하는 메서드를 만들고 그 메서드에서 원하는 값을 return하도록 하면 될 것 같다. return값을 이용해서 계산기 내부로직에 반영하면 되지 않았을까 하는 생각이 든다. 
+
 
 ### 프로젝트 코드에서 작성한 것 중 생각하지 않고 넘어간 것을 알아보자 (ing)
 
